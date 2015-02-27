@@ -16,29 +16,33 @@ import java.io.InputStreamReader;
  */
 class GetRestAsyncTask extends AsyncTask<String, Integer, Long>
 {
-    String text;
+    String text = "";
 
-    protected Long doInBackground() {
+    @Override
+    protected Long doInBackground(String... params) {
         HttpClient client = new DefaultHttpClient();
-        HttpGet request = new HttpGet("http://www.seznam.cz");
+        HttpGet request = new HttpGet("http://private-2d9dc-hktest.apiary-mock.com/notes");
         try {
             HttpResponse response = client.execute(request);
 
             // Get the response
             BufferedReader rd = new BufferedReader
                     (new InputStreamReader(response.getEntity().getContent()));
-
             String line = "";
-
             while ((line = rd.readLine()) != null) {
-                tv.append(line);
+                text += line;
             }
+
         }
         catch (Exception e)
         {
-            tv.setText(e.getLocalizedMessage());
+            return Long.getLong("-1");
         }
+        return Long.getLong("1");
     }
 
-
+    public String getStringResponse()
+    {
+        return text;
+    }
 }

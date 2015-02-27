@@ -31,6 +31,7 @@ import java.net.URI;
 
 public class MainActivity extends ActionBarActivity {
     TextView tv;
+    GetRestAsyncTask result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,40 +43,21 @@ public class MainActivity extends ActionBarActivity {
 
     /** Called when the user touches the button */
     public void getMessage(View view) {
-        tv = (TextView) findViewById(R.id.text);
-
+        result = (GetRestAsyncTask) new GetRestAsyncTask().execute("");
     }
 
-
+    /** Called when the user touches the button */
+    public void refreshText(View view)
+    {
+        tv = (TextView) findViewById(R.id.text);
+        tv.setText(result.getStringResponse());
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
-
-    public HttpResponse getResponse(HttpClient client, HttpGet request)
-    {
-
-            AsyncTask task = new AsyncTask() {
-                @Override
-                protected Object doInBackground(Object[] params) {
-                    try {
-                    DefaultHttpClient client = (DefaultHttpClient) params[0];
-                    HttpGet request = (HttpGet) params[1];
-
-                    return response;
-                    }
-                    catch (Exception e)
-                    {
-                        tv.setText(e.getLocalizedMessage());
-                        return null;
-                    }
-                }
-            };
-        task.execute(client, request);
-        return null;
     }
 
     @Override
