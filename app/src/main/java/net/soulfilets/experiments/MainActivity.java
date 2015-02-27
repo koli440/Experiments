@@ -70,6 +70,7 @@ public class MainActivity extends ActionBarActivity {
                 tv.append(c.getString("id"));
                 tv.append(" - ");
                 tv.append(c.getString("title"));
+                tv.append("\n");
             }
         }
         catch (Exception e) {
