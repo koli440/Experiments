@@ -20,6 +20,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -31,6 +33,7 @@ import java.net.URI;
 
 public class MainActivity extends ActionBarActivity {
     TextView tv;
+    TextView errorTv;
     GetRestAsyncTask result;
 
     @Override
@@ -49,8 +52,30 @@ public class MainActivity extends ActionBarActivity {
     /** Called when the user touches the button */
     public void refreshText(View view)
     {
+        String resultString = result.getStringResponse();
+
         tv = (TextView) findViewById(R.id.text);
-        tv.setText(result.getStringResponse());
+        tv.setText("");
+
+        errorTv = (TextView) findViewById(R.id.error);
+
+        JSONArray notes;
+
+        if (resultString != null && resultString != "")
+        try {
+            JSONObject jsonObject = new JSONObject(resultString);
+            notes = jsonObject.getJSONArray("notes");
+            for (int i = 0; i < notes.length(); i++) {
+                JSONObject c = notes.getJSONObject(i);
+                tv.append(c.getString("id"));
+                tv.append(" - ");
+                tv.append(c.getString("title"));
+            }
+        }
+        catch (Exception e) {
+            errorTv.setText(e.getLocalizedMessage());
+        }
+
     }
 
     @Override
